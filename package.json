@@ -25,6 +25,7 @@
   },
   "homepage": "https://github.com/FeliciousX/reveal-overlay#readme",
   "dependencies": {
+    "reset.css": "^2.0.2",
     "reveal.js": "^3.4.1",
     "xstream": "^10.1.0"
   },
