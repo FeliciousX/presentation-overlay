@@ -26,6 +26,7 @@
     "reveal.js": "^3.4.1"
   },
   "devDependencies": {
-    "standard": "^8.6.0"
+    "standard": "^8.6.0",
+    "webpack": "^2.2.1"
   }
 }
