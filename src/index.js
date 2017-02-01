@@ -1,3 +1,6 @@
-import Reveal from 'reveal.js'
+const theme = 'blood'
+require('reveal.js/css/reveal.css')
+require(`reveal.js/css/theme/${theme}.css`)
 
-console.log('Hello World', Reveal)
+import Reveal from 'reveal.js'
+Reveal.initialize()
