@@ -1,17 +1,19 @@
 import 'reset.css/reset.css'
 import './style.css'
 
-import fromEvent from 'xstream/extra/fromEvent'
+import Cycle from '@cycle/xstream-run'
+import {makeDOMDriver, h} from '@cycle/dom'
 
-const viewportHeight$ = fromEvent(window, 'resize')
-  .map(ev => ev.target.innerHeight)
-  .startWith(window.innerHeight)
+import xs from 'xstream'
 
-function next (height) {
-  console.log(height)
-  const contentEl = document.getElementById('content')
-  contentEl.style.height = `${height}px`
+const drivers = {
+  DOM: makeDOMDriver('#app')
 }
 
-viewportHeight$.addListener({next})
+function main (sources) {
+  return {
+    DOM: xs.of(h('h1', {}, 'Hello World'))
+  }
+}
 
+Cycle.run(main, drivers)
