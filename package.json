@@ -24,5 +24,8 @@
   "homepage": "https://github.com/FeliciousX/reveal-overlay#readme",
   "dependencies": {
     "reveal.js": "^3.4.1"
+  },
+  "devDependencies": {
+    "standard": "^8.6.0"
   }
 }
