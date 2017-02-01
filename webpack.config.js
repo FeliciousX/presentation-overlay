@@ -1,3 +1,5 @@
+const HTMLWebpackPlugin = require('html-webpack-plugin')
+const webpack = require('webpack')
 const path = require('path')
 
 module.exports = {
@@ -15,5 +17,9 @@ module.exports = {
       }
     ]
   },
+  plugins: [
+    new webpack.optimize.UglifyJsPlugin(),
+    new HTMLWebpackPlugin({template: './src/index.html'})
+  ],
   devtool: 'source-map'
 }
