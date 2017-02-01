@@ -21,7 +21,7 @@ module.exports = {
     new webpack.optimize.UglifyJsPlugin(),
     new HTMLWebpackPlugin({template: './src/index.html'})
   ],
-  devtool: 'source-map',
+  devtool: 'eval',
   devServer: {
     contentBase: path.join(__dirname, 'dist'),
     compress: true,
