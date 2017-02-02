@@ -1,5 +1,17 @@
-require('reset.css/reset.css')
+import 'reset.css/reset.css'
+import './style.css'
 
-import xs from 'xstream'
+import fromEvent from 'xstream/extra/fromEvent'
 
-xs.periodic(1000).take(5).addListener({next: console.log})
+const viewportHeight$ = fromEvent(window, 'resize')
+  .map(ev => ev.target.innerHeight)
+  .startWith(window.innerHeight)
+
+function next (height) {
+  console.log(height)
+  const contentEl = document.getElementById('content')
+  contentEl.style.height = `${height}px`
+}
+
+viewportHeight$.addListener({next})
+
