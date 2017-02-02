@@ -4,11 +4,13 @@ body {
 }
 
 #topbar {
+  transition: height 1s;
   width: 100%;
   background-color: #4400EE;
 }
 
 #content {
+  transition: height 1s;
   background-color: #EE5544;
 }
 
