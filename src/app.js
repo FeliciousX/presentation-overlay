@@ -13,7 +13,7 @@ export default function main (sources) {
 
 function model (viewportHeight$) {
   const initialState = {
-    topbar: { style: { marginTop: 0, height: 60 } },
+    topbar: { style: { height: 60 } },
     content: { style: { height: 0 } },
     footer: { style: { height: 214 } }
   }
