@@ -4,6 +4,7 @@ body {
 }
 
 #topbar {
+  overflow-y: hidden;
   transition: height 1s;
   width: 100%;
   background-color: #4400EE;
