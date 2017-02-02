@@ -25,9 +25,10 @@
   },
   "homepage": "https://github.com/FeliciousX/reveal-overlay#readme",
   "dependencies": {
-    "reset.css": "^2.0.2",
     "@cycle/dom": "^14.3.0",
     "@cycle/xstream-run": "^4.2.0",
+    "ramda": "^0.23.0",
+    "reset.css": "^2.0.2",
     "xstream": "^10.1.0"
   },
   "devDependencies": {
