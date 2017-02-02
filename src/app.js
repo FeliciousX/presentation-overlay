@@ -1,17 +1,31 @@
+import xs from 'xstream'
+import {propEq, prop} from 'ramda'
+
 import view from './view'
 
 export default function main (sources) {
-  const viewportHeight$ = sources.window.events('resize')
-    .map(ev => ev.target.innerHeight)
-    .startWith(window.innerHeight)
-
-  const state$ = model(viewportHeight$).debug('help')
+  const action$ = intent(sources)
+  const state$ = model(action$)
   return {
     DOM: state$.map(view)
   }
 }
 
-function model (viewportHeight$) {
+function intent (sources) {
+  const viewportHeight$ = sources.window.events('resize')
+    .map(ev => ev.target.innerHeight)
+    .startWith(window.innerHeight)
+    .map(payload => ({
+      type: 'viewport-change',
+      payload
+    }))
+
+  return xs.merge(
+    viewportHeight$
+  )
+}
+
+function model (action$) {
   const initialState = {
     controls: true,
     topbar: { style: { height: 60 } },
@@ -19,7 +33,9 @@ function model (viewportHeight$) {
     footer: { style: { height: 214 } }
   }
 
-  const reducer$ = viewportHeight$
+  const viewportChange$ = action$
+    .filter(propEq('type', 'viewport-change'))
+    .map(prop('payload'))
     .map(height => function (state) {
       return {
         ...state,
@@ -33,5 +49,10 @@ function model (viewportHeight$) {
       }
     })
 
+  const reducer$ = xs.merge(
+    viewportChange$
+  )
+
   return reducer$.fold((state, reducer) => reducer(state), initialState)
+    .drop(1)
 }
