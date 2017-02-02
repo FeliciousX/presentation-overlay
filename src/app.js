@@ -52,11 +52,19 @@ function model (action$) {
       return {
         ...state,
         viewportHeight,
+        controls: true,
+        topbar: {
+          ...state.topbar,
+          style: {
+            ...state.topbar.style,
+            height: 60
+          }
+        },
         content: {
           ...state.content,
           style: {
             ...state.content.style,
-            height: viewportHeight - state.footer.style.height
+            height: viewportHeight - state.footer.style.height - state.topbar.style.height
           }
         }
       }
@@ -104,7 +112,7 @@ function model (action$) {
           ...state.content,
           style: {
             ...state.content.style,
-            height: state.viewportHeight - state.footer.style.height
+            height: state.viewportHeight - state.footer.style.height - state.topbar.style.height
           }
         }
       }
