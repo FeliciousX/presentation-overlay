@@ -20,8 +20,19 @@ function intent (sources) {
       payload
     }))
 
+  const contentMouseEnter$ = sources.DOM.select('#content').events('mouseenter')
+    .mapTo({ type: 'content-mouseenter' })
+
+  const contentMouseMove$ = sources.DOM.select('#content').events('mousemove')
+    .map(ev => ({
+      type: 'content-mousemove',
+      payload: ev
+    }))
+
   return xs.merge(
-    viewportHeight$
+    viewportHeight$,
+    contentMouseEnter$,
+    contentMouseMove$
   )
 }
 
@@ -45,14 +56,64 @@ function model (action$) {
           ...state.content,
           style: {
             ...state.content.style,
-            height: state.controls ? viewportHeight - state.footer.style.height : viewportHeight
+            height: viewportHeight - state.footer.style.height
+          }
+        }
+      }
+    })
+
+  const hideControl$ = action$
+    .filter(propEq('type', 'content-mouseenter'))
+    .mapTo(function (state) {
+      return {
+        ...state,
+        controls: false,
+        topbar: {
+          ...state.topbar,
+          style: {
+            ...state.topbar.style,
+            height: 0
+          }
+        },
+        content: {
+          ...state.content,
+          style: {
+            ...state.content.style,
+            height: state.viewportHeight
+          }
+        }
+      }
+    })
+
+  const showControl$ = action$
+    .filter(propEq('type', 'content-mousemove'))
+    .map(prop('payload'))
+    .filter(ev => ev.clientY > 400)
+    .mapTo(function (state) {
+      return {
+        ...state,
+        controls: true,
+        topbar: {
+          ...state.topbar,
+          style: {
+            ...state.topbar.style,
+            height: 60
+          }
+        },
+        content: {
+          ...state.content,
+          style: {
+            ...state.content.style,
+            height: state.viewportHeight - state.footer.style.height
           }
         }
       }
     })
 
   const reducer$ = xs.merge(
-    viewportChange$
+    viewportChange$,
+    hideControl$,
+    showControl$
   )
 
   return reducer$.fold((state, reducer) => reducer(state), initialState)
