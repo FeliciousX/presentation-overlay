@@ -6,8 +6,19 @@ import {makeDOMDriver} from '@cycle/dom'
 
 import main from './app'
 
-const drivers = {
-  DOM: makeDOMDriver('#app')
+import fromEvent from 'xstream/extra/fromEvent'
+
+function makeEventDriver (Node) {
+  return function eventDriver () {
+    return {
+      events: (eventName) => fromEvent(Node, eventName)
+    }
+  }
 }
 
-Cycle.run(main, drivers)
+const drivers = {
+  DOM: makeDOMDriver('#app'),
+  window: makeEventDriver(window)
+}
+
+window.requestAnimationFrame(() => Cycle.run(main, drivers))
