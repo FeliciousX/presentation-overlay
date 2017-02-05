@@ -7,6 +7,8 @@ if (!sh.which('git')) {
   sh.exit(1)
 }
 
+const commit = sh.exec('git log --oneline -1').stdout
+console.log('At commit', commit)
 console.log('Building with webpack...')
 
 sh.exec('npm run build', { asnyc: true }, (code, stdout, stderr) => {
@@ -15,8 +17,8 @@ sh.exec('npm run build', { asnyc: true }, (code, stdout, stderr) => {
     sh.exit(1)
   }
 
-  const commit = sh.exec('git log --oneline -1')
-  if (sh.exec('git checkout gh-pages', { silent: true }).code !== 0) {
+  console.log('Checking out to gh-pages...')
+  if (sh.exec('git checkout gh-pages').code !== 0) {
     console.error('Error: git checkout failed')
     sh.exit(1)
   }
@@ -24,19 +26,21 @@ sh.exec('npm run build', { asnyc: true }, (code, stdout, stderr) => {
   console.log('Copying files...')
   sh.cp('dist/*', '*')
 
-  console.log('git add new files...')
+  console.log('Staging new files...')
   sh.exec('git add index.html bundle.js')
 
-  console.log('git commit...')
+  console.log('Committing new files...')
   if (sh.exec(`git commit -am "deploys ${commit}"`).code !== 0) {
     console.error('Error: git commit failed')
     sh.exit(1)
   }
 
-  console.log('git push to gh-pages')
+  console.log('Pushing to origin...')
   if (sh.exec('git push origin gh-pages').code !== 0) {
     console.error('Error: git push to origin failed')
     sh.exit(1)
   }
+
+  console.log('Checking out to master...')
   sh.exec('git checkout master')
 })
