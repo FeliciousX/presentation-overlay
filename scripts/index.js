@@ -1,36 +1,42 @@
-const { which, exit, exec, cp } = require('shelljs')
+const sh = require('shelljs')
 
-if (!which('git')) {
+sh.config.silent = true
+
+if (!sh.which('git')) {
   console.error('Sorry, this script requires git')
-  exit(1)
+  sh.exit(1)
 }
 
 console.log('Building with webpack...')
 
-exec('npm run build', { asnyc: true, silent: true }, (code, stdout, stderr) => {
+sh.exec('npm run build', { asnyc: true }, (code, stdout, stderr) => {
   if (code !== 0) {
     console.error(stderr)
-    exit(1)
+    sh.exit(1)
   }
 
-  const commit = exec('git log --oneline -1', { silent: true })
-  if (exec('git checkout gh-pages').code !== 0) {
+  const commit = sh.exec('git log --oneline -1')
+  if (sh.exec('git checkout gh-pages', { silent: true }).code !== 0) {
     console.error('Error: git checkout failed')
-    exit(1)
+    sh.exit(1)
   }
 
-  cp('dist/index.html', 'index.html')
-  cp('dist/bundle.js', 'bundle.js')
+  console.log('Copying files...')
+  sh.cp('dist/*', '*')
 
-  exec('git add index.html bundle.js')
-  if (exec(`git commit -am "deploys ${commit}"`).code !== 0) {
+  console.log('git add new files...')
+  sh.exec('git add index.html bundle.js')
+
+  console.log('git commit...')
+  if (sh.exec(`git commit -am "deploys ${commit}"`).code !== 0) {
     console.error('Error: git commit failed')
-    exit(1)
+    sh.exit(1)
   }
 
-  if (exec('git push origin gh-pages').code !== 0) {
+  console.log('git push to gh-pages')
+  if (sh.exec('git push origin gh-pages').code !== 0) {
     console.error('Error: git push to origin failed')
-    exit(1)
+    sh.exit(1)
   }
-  exec('git checkout master')
+  sh.exec('git checkout master')
 })
