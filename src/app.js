@@ -40,7 +40,7 @@ function model (action$) {
   const initialState = {
     controls: true,
     viewportHeight: 0,
-    topbar: { style: { height: 60 } },
+    topbar: { height: 60, style: { marginTop: 0 } },
     content: { style: { height: 0 } },
     footer: { style: { height: 214 } }
   }
@@ -57,14 +57,14 @@ function model (action$) {
           ...state.topbar,
           style: {
             ...state.topbar.style,
-            height: 60
+            marginTop: 0
           }
         },
         content: {
           ...state.content,
           style: {
             ...state.content.style,
-            height: viewportHeight - state.footer.style.height - state.topbar.style.height
+            height: viewportHeight - state.footer.style.height - state.topbar.height
           }
         }
       }
@@ -80,7 +80,7 @@ function model (action$) {
           ...state.topbar,
           style: {
             ...state.topbar.style,
-            height: 0
+            marginTop: -state.topbar.height
           }
         },
         content: {
@@ -105,14 +105,14 @@ function model (action$) {
           ...state.topbar,
           style: {
             ...state.topbar.style,
-            height: 60
+            marginTop: 0
           }
         },
         content: {
           ...state.content,
           style: {
             ...state.content.style,
-            height: state.viewportHeight - state.footer.style.height - state.topbar.style.height
+            height: state.viewportHeight - state.footer.style.height - state.topbar.height
           }
         }
       }

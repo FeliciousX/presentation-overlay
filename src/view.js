@@ -6,7 +6,7 @@ export default ({topbar, content, footer}) =>
       props: { id: 'topbar' },
       style: {
         ...topbar.style,
-        height: `${topbar.style.height}px`
+        marginTop: `${topbar.style.marginTop}px`
       }
     }, 'Title'),
     div({
